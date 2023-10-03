@@ -171,7 +171,7 @@ The Architecture Process
 - Support the team
 
 
-`Dive deeper on Mapping the Components - most imprtant step in whole process`
+### 4.1 `Mapping to Component - Mapping - most imprtant step in whole process`
 - Determines how the system will look like in long run
 - Once set - not easy to change => taken very seriously
 
@@ -180,6 +180,8 @@ The Architecture Process
 What is it ?
 - Defining the various componenets of the system
 - Remembers: Components =  Services
+
+`Mapping`
 
 Mapping should be based on
 - `Bussiness requirements`
@@ -196,6 +198,244 @@ Mapping should be based on
   We still have the relationship bw services - `one services can realate to data in other services as long as this relationship is done using ID of the entity and not the entity itseft`
 
 ![Example](images/mapping_component_example.png)
+
+
+
+`Edge case #1`
+ - Retrieve all customers from HN with total number of orders for each customer. It related to 2 service orders and customers
+   | Customer name | No of orders |
+   | ------------- | ------------ |
+   | Thanh         | 10           |
+   | Thao          | 15           |
+
+`We have three approaches to resolve #1`
+- `Data Duplication`
+  - We have 2 service Orders and Customers and the number of oders stored not only in Order service database but also in the Customer database => there is anychange on number of orders then we need to update in both Customers and Orders service
+- `Service query`
+  - Customer service go  Orders service and retrieves the number of orders for each customer => Orders db store the Customer IDs that made the order => problem for this is network and service when we have 200 customer we have to access Order serives 200 times that is a lot, we can use batch but still a lot more coding to do
+
+- `Aggregation Service`
+  - In addition to 2 services we already have, there is another service that aggregates the result of the queries
+    - Agg service query the Customer service and then query the Orders service with the result of customer id
+
+  -  => That data and service are not mixed - they don't know each others
+
+
+
+`Which one should be choose for our specific #1 scenario`
+This case we use first one because it better than the other two
+- With solution 1 - very little data is duplicated and it's read only so no synch is required
+- With solution 2 performance is problem
+- With solution 3 we need additional development for something quite small 
+
+
+`Edge case #2`
+ - Retrieve list of all the orders in the system
+   - using only Orders servic 
+   - volume of data is huge
+ All data in the single request will bring service and network to their knees
+   - services are not designed for this scenario, it best use for a well-defined amount of data processing, and amount that can be handled quickly and efficiently
+
+`What should we do for #2`
+ - Find out what's the purpose of query
+ - You should recomment using a report enine for this query which can work directly with db
+
+`Cross-cutting services`
+
+That provides system-wide utilities, meaning utilities are not tied to specific business scenario but ones that almost very service can benefit from with some common example
+ -  Logging
+ - Caching
+ - User management
+  and this shoud be a part of Mapping
+
+### 4.2 `Mapping to component - Defining Communicaion Patterns`
+- Effient communication between services is crucial
+- Alot interservice so important to choose the correct communication pattern
+
+`Wrong pattern` => low performance and unmaintainable system and poor role handling
+
+- Main patterns:
+  - 1 to 1 Sync
+  - 1 to 1 Async
+  - Pub-Sub/Event Driven
+
+`Let's go to deatail main pattern`
+
+**`#1. 1 to 1 synch`** : Service call another service and waits for the response
+  - Pros: 
+    - Immediate response
+    - Error handling
+    - Easy to implement
+  - Cons:
+    - Performance - waiting response
+
+One service call to other service is called Direct Connection - Usually not recommended because image we have 10 services and all of them have to direction connection to another one. It will become Spiderweb => can lead to problem.
+
+To resolve Spiderweb we use :
+
+`service discovery`: web the service want to access another service, it has to go service discovery and asks for URL of other services then use it for access other service => service just know the service discovery so we don't have strong cupleing bw services.
+
+Provider suggestion: Consul - it provides service discovery and mornitoring and more
+
+`gateway`: service would like to request another service then it goes to gateway and gateway goes to the required service and performs the call => service just know the gateway's URL so also we don't have strong cupling bw services.
+
+**What diiferent bw `service discovery` and `gateway` and which one should we use ?**
+
+It depends - service discovery is easier in implementation but gateway provides more as monitorning, authorization and authentication and more
+
+**Current industry trending - we go more to gateways**
+
+**`#2. 1 to 1 Async`** : Service call another service without waiting  (continue working) and used mainly when the first service wants to pass a message to the other service like a notify or someone like that which don't care about response.
+ - Pros:
+   - Performance
+ - Cons: 
+   - Needs more setup
+   - Difficult error handling
+
+![1-1 asynch](images/1-1-asynch.png)
+
+**`#3 Pub-Sub / Event Driven`** : service want to notify other services about something
+ and has no idea how many services listen and doesn't wait for response. Used mainly when the first service want to notify about an importain event in system.
+  - Pros:
+    - Performance
+    - Notify multiple services at once
+  - Cons
+   - Need more setup
+   - Difficult error handling
+   - Might cause load
+
+![pub-sub](images/pub-sub.png)
+
+---------------- Aready had in slide forder ------------
+---------------- so I just write the importain things from now -----------------------------------------------
+
+
+# DEPLOYMENT
+ `CI/CD`
+  - CI : Build -> Unitest -> Intergration Test -> Staging (dev deployment) -> Prod . 3 firsts is intergration. 2 last is delivery
+  - Piline : Line to define set of actions
+
+`Containers`: 
+
+Traditional 
+- copy and build on production machine 
+- problem found out on server but no on dev machine
+
+That is reason the container appear
+ - Thin packgage model
+ - Package software, it's dependencies and configuration files
+ - Can be copied bw machines. 
+ - Uses the underlying operating system
+
+`Different bw Containers and Machines`
+Container managed by runtime are etremely lightweight in comparision to VM.
+They share operating system with host (Not requied whole operating system in setup)
+
+`Why is containers`
+ - Predictable: The same package is deployed on all machine
+ - Performance: run up in a sencond vs minutes in VM
+ - Density: One server can run thousands of containers vs drozens of VMs
+
+ `Docker`
+ - Most popular container environment
+ - De-facto standard for containers
+ - Relesed in 2013
+
+ `Docker architecture`
+ - Docker demon: the service runs on the server and responsible for managing the docker containers. buid, expose, on, off so that is heart of docker.
+ - Images: Set of definitions in software for a container to run - that is static file, they don't run, they are the basis for the containers.
+ - Containers: that made by calling to image to run a container and managed by docker daemon
+ - Client: Interct with docker deamon - CLI command line interface where you can send instruction to deamon
+
+`Dockerfile`
+ - Contains instructions for building custom images.
+
+`Container management` there are many container (50 -> 100). How to manage them to deployment, scalability, monitoring, routing, high-availability
+
+So we have `Kubernates`
+
+`Kubernete Architecture` is a container management
+ - Released by google 2014
+ - Provides all aspects of management.
+   - routing
+   - scaling
+   - high-availability
+   - automated deployment
+   - configuration management
+   - more...
+
+# Testing Microservices
+- Unit test
+- Intergration test
+- End-to-End test
+
+`Microservice Chanllenges with Testing`
+ - Testing state across services
+ - Non-functional dependent services
+ 
+`How to deal with that`
+`Unit test`
+- Test individual code unit (not whole follow and communication bw components)
+  - Method, interface, etc
+- In-process only (don't check code communicate with DB)
+- Usually automated
+- Developed by developers
+
+`Intergration test` : 
+ - Test the interactions bw component or services is correct nhằm đảm bảo liên kết đúng đắn
+ - Kiểm tra ở mức đơn vị hoặc nhỏ hơn - giữa 2 hoặc vài thành phần.
+ - Kiểm tra trên môi trường dev-local-int
+ - Kiểm tra giao tiếp API, cơ chế truyền tải dữ liệu, tích hợp chức năng cụ thể
+
+`Propose`
+- Test the service's functionality
+- Cover all code paths services
+- Some paths might include accessing external objects such as DB and other services
+
+`Inside`
+- Use the service's API
+- Developed and run by QA team (not developer)
+- Should be automated
+- Most unit test support intergration test
+
+`Questions for intergration test - what happen when DB or other services isn't ready ? => Test Double`
+
+`Test double`
+- Pretents to be use object/service to  allow testing
+- Three types:
+  - Fake: 
+    - implements the shortcut to external system (full replace original object and provides the lightweight implementation) Ex: fake db by use in memory db h2
+    - Many times implement in-process
+    - Requires code change in the code (to know when use fake insteal of real object)
+  - Stub: a piece of code hold the predefined data ( fake the data on code only instal of whole lightweight system)
+    - Hold hard-coded data
+    - Usually replaces data stored in a DB
+    - Allow simnulating data service quickly
+    - No code change required
+  - Mock: 
+    - Verifies access was made
+    - Holds no data
+    - No code change required
+    - Normaly it's positioned outside of service - service no idea it works with a mock
+
+`End-to-End test` 
+ - Đảm bảo ứng dụng hoạt động xuyên suốt, kiểm tra toàn bộ quá trình làm việc của ứng dụng, kiểm tra workfollow, tasks và đảm bảo rằng  chúng hoạt động đúng.
+ - Kiểm tra mức tổng thể, toàn bộ quá trình từ đầu đến cuối.
+ - Kiểm tra ở môi trường pre-prod để mô phỏng điều kiện thực tế tốt hơn
+ - Kiểm tra toàn bộ ứng dụng dưới góc độ người dùng, bao gồm UI, follow, tích hợp các thành phần để đảm bảo toàn bộ ứng dụng hoạt động chính xác
+
+`Propose`
+- Test whole follows of the system.
+- Touch to all services
+- Test for end state - service call to other services which messed thing up, it won't detect it but end-to-end test will. 
+
+`Infor`
+- There are extremely fragile
+- Require code
+- Used for main scenarios only
+
+
+# Service Mesh
 
 
 
