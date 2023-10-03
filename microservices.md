@@ -436,6 +436,46 @@ So we have `Kubernates`
 
 
 # Service Mesh
+- Manage all service-to-service communication
+- Provides some additional services.
+
+`Problem resolve`
+- Microservice communication bw them a lot => 
+  - Timeouts
+  - Security
+  - Retries
+  - Monitoring
+
+=> service mess will manage all communications, all issues it are handled by the mesh and provides all communication services => services commnunicate with the service mesh only.
+
+`Service mesh services`
+- Protocol conversion - convert communication via HTTP API
+- Communication security
+- Authentication
+- Realiability (timeout, retries, health checks, `circuit breaking`)
+- Monitoring
+- Service discovery
+- Testing (can config to route some messages to different service to test them) - A/B testing, traffic splitting
+- Load balancing
+- and more...
+
+`Circuit breaker` #1
+- Prevents cascading failures when service fails.
+![Alt text](images/ciruit_breaker.png)
+That case #1 in font of green service, it monitors the service and check how many timeout it's experiences if the number goes above some threshold => #1 cut green service off => now call to green service then #1 will send imediately response with error and not wait for service timeout
+
+### `Service mesh architecture`
+![Alt text](images/service_mesh_arc.png)
+
+### Types of Service Mesh
+- `In-process` : service mesh implemented as software component which is a part of services process itself, service call to mesh method to  commnunicate with other services, which in turn perform a network call to other mesh
+![Alt text](images/sm-inprocess.png)
+  - Performance - good because single network call when using service mesh, no network call bw service and mesh component.
+  - 
+- `Sidecar` : servie mesh is implemented as an out of process component, it is not part of services process, service make a network call to mesh component that belongs to it, mesh component make another call to mesh component of the called service and this mesh component will call the service we want to tal to.
+  - Platform agnostic: Don't care how to implemet because it is indepencies on flatform
+  - Code agnostic
+
 
 
 
