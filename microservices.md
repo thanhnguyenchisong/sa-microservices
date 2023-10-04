@@ -1,5 +1,5 @@
 # Microservices
-## 1. History of Microservices
+# 2. `History of Microservices`
 This is result of problem with 2 architrcture paradiagms `Monolith` and `SOA`
 ### 1.1 `Monolith`
  - original art where all sw component are exected in single process
@@ -44,7 +44,7 @@ This is result of problem with 2 architrcture paradiagms `Monolith` and `SOA`
 - Lack of tooling - testing and deployment were manly manual processes and take a lot of time
 - Take longer time to build a monolith
 
-## 2. `Microservices Architecture`
+# 4. `Microservices Architecture`
 - Has to be modular with simple API
 - Term first appreared in 2011
 
@@ -145,7 +145,7 @@ Motivation
 - No need to break everything apart
 - Start small and upgrade each part separately
 
-## 3. `Problems solbved`
+# 5. `Problems solved`
 - Single technology Platform
 - Inflexible Deployment
 - Inefficient Compute Resource
@@ -154,7 +154,7 @@ Motivation
 - Lack of tooling
 
 
-## 4. `Designing Microservices Architechture`
+# 6. `Designing Microservices Architechture`
 - Designing should be methodical
 - Do not rush into development - "plan more, code less"
 - Critical to the success of system
@@ -310,7 +310,7 @@ It depends - service discovery is easier in implementation but gateway provides 
 ---------------- so I just write the importain things from now -----------------------------------------------
 
 
-# DEPLOYMENT
+# 7. `DEPLOYMENT`
  `CI/CD`
   - CI : Build -> Unitest -> Intergration Test -> Staging (dev deployment) -> Prod . 3 firsts is intergration. 2 last is delivery
   - Piline : Line to define set of actions
@@ -364,7 +364,7 @@ So we have `Kubernates`
    - configuration management
    - more...
 
-# Testing Microservices
+# 8. `Testing Microservices`
 - Unit test
 - Intergration test
 - End-to-End test
@@ -435,7 +435,7 @@ So we have `Kubernates`
 - Used for main scenarios only
 
 
-# Service Mesh
+# 9. `Service Mesh`
 - Manage all service-to-service communication
 - Provides some additional services.
 
@@ -467,7 +467,7 @@ That case #1 in font of green service, it monitors the service and check how man
 ### `Service mesh architecture`
 ![Alt text](images/service_mesh_arc.png)
 
-### Types of Service Mesh
+### `Types of Service Mesh`
 - `In-process` : service mesh implemented as software component which is a part of services process itself, service call to mesh method to  commnunicate with other services, which in turn perform a network call to other mesh
 ![Alt text](images/sm-inprocess.png)
   - Performance - good because single network call when using service mesh, no network call bw service and mesh component.
@@ -476,8 +476,92 @@ That case #1 in font of green service, it monitors the service and check how man
   - Platform agnostic: Don't care how to implemet because it is indepencies on flatform
   - Code agnostic
 
+=> More popular
+
+`Products and Implementation`
+- Quite a few Service Mesh implementations.
+- Some in-process, most sidecar
+- Most free, some aren't
+- DO NOT develop your own (waste of time, should focus on the bussiness logic)
+
+`Side implementation` : Some popular
+![Alt text](images/sidecar_implementation.png)
+- Istio most popular one, it designed to work with container and managed by Kubernates
+
+`In-Process implementation`: DDS FOUNDATION - that isn't free but provide realy fast performance
+
+### `Should you use Service Mesh only if`
+- You have a lot of services
+- Which communicate a lot with each other
+- Or you have complex communication requirement with various protocols or brittle network that is brone to fail.
+
+# 10. `Logging and Monitoring`
+- Extrmely important in Microservices
+- Flow goes through multiple processes
+- Hard to get wholistic view
+- Hard to know what's going on with the services.
+
+=> handled by well-design logging & monotoring
+
+`Purpose`
+- Logging
+  - Recording the system's activity
+  - Audit
+  - Documenting errors
+
+- Monitoring
+  - Based on system's metrics - then sending alerts
+
+### 10.1 `Logging`
+- implementation:
+  - whilistic view system
+  - tracing end-to-end flow
+  - contains as much infor as possible
+  - filted using serverity, module, time, etc.
+- Architecture:
+  - Traditional: 
+  
+   ![Alt text](images/old_log.png)
+  - Microservices:
+  
+   ![Alt text](images/micr_log.png)
 
 
+`Need to resolve`
+ - `Logging Library`
+   - Beeter use one lib for all services
+   - if using soem platforms - one lib for each platform
+   - Use serverity wisely
+   - Log as much info as possible
+     - timestamp
+     - User
+     - Serity
+     - Servivce
+     - Message
+     - Full stack trace if error
+     - `Correlation ID` : a flow identifiier which correlates events between services and can enables stitching separate events to single flow => same flow -> same Correlation ID -> filter by that can see full flow.
+
+![Alt text](images/logging.png)
+
+- `Transport` : from service to central looging
+  - Prefer using Queue (Rabbit MQ/Kafka)
+  - Balances the load (under heavy load)
+  - No performance hit on client side
+
+- `Logging Service`: 
+  - Based on indexing/digesting/seach product (handle huge mount of data and value formats and using easy to use visualization tool and query language)
+  - Can index any log format
+  - Provides gread visualization
+  - No development required (ELK Stack or splunk tool)
+
+### 10.2 `Monitoring`
+- monitoring looks at metrics and detects anomalies
+- Provides simplified view of system status (as a Kibana dasboard)
+- Alerts when there is a problem
+
+`Type of monitoring`
+ - Infrastructure
+   - 
 
 
 
