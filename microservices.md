@@ -561,7 +561,83 @@ That case #1 in font of green service, it monitors the service and check how man
 
 `Type of monitoring`
  - Infrastructure
-   - 
+   - Monitors the sever
+   - CPU/RAM/Disk/Network
+   - Alerts when infreastructure problem is detected
+   - Data source: agent on the machine
+ - Application
+   - Monitors application only
+   - Looks at metrics published by the app
+     - Request/min, Orders/day, etc
+   - Alerts when problem is detected in application itseft
+
+ `Monitoring Products`
+   Nagios, ELK Stack, New Relic, Application Insights
+
+# 11. `When Not to Use Microservices`
+`Small system`
+-  low complexity should usually be a monolith
+-  Microservices add complexity
+-  Mapping results in 2-3 services - microservices are not probably not the right option
+
+`Intermingled Functionality or Data`
+- Most all requests for data span more than one service - there's a problem.
+
+`Performance Sensitive Systems`
+- MS have performance overhead
+- Result of the network hops
+- System is Very performance sensitive - think twice
+  - SLA is a low-milliseconds or event microsecond
+
+`Quick-and-Dirty Systems` like POC
+- MS Implementation take time => don't go
+- Need a small, quick system, and need it NOW -> don't go
+- Usually has a short lifespan -> don't go
+
+`No planned Updated`
+- Microservices's main strength is in short update cycle
+- No updates == No microservices
+
+# 12. `Microservices and the Organization`
+ 
+ `Problem with traditional team`
+ - There are multiple teams  -> no one taks responsiblity
+ - Teams are horizontal
+ - No wholistic view on the product
+
+ `The Ideal team`
+ - Ideal tem is responsible for all aspects of service
+   - Backend
+   - Frontend
+   - DB
+   - Deployment
+  
+  `Change mindset`
+  - Training - Lecture on Microservices, success stories, basic sprinciples
+  - POC - go small, quick win
+  - Work closely with the team during design and development
+
+# 13. `Anti-Patterns and Common Mistakes`
+
+`No well-defined Services` is one mistake
+- Define what inside and outside of service
+- The dependent functionality gets added continuously
+-> we need 
+`No well-defined API`  is one mistake
+- Should be well throught fo and easy to learn
+- Must be consistent : follow the same standart access all endpoint and services, it must be logical => lead to predictability -> developer could guess how new API look like based on old one
+- Must be versioned -> must support multiple version APIs, when you updated and modifies the API, not all services client updated with the new version
+- Must be platform agnostic
+- Must be part of design
+
+`Implement Cross-Cutting last` is one mistake
+- Should be implemented first
+- Other service are going to use them
+
+`Expanding Service Boundaries` is one mistake
+- Expanding these boundaries makes the service inefficient and bloated
+- It's tempting - don't to that
+
 
 
 
