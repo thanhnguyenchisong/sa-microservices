@@ -637,9 +637,71 @@ That case #1 in font of green service, it monitors the service and check how man
 `Expanding Service Boundaries` is one mistake
 - Expanding these boundaries makes the service inefficient and bloated
 - It's tempting - don't to that
+- Many times new service should be used instead of exanding existing servives's boundaries
+
+# 14. `Breaking Monolith to Microservices`
+
+### `Motivation`
+- Shorten update cycle
+  - Update the feature is faster and easier (develop, deploy, test)
+- Modularize the system
+  - Easier maintain and flexiable for future
+- Save costs
+  - software and hardware cost
+  - monolith based on outdated, expensive technology
+- Modernize the system (resolve sundown of old tech)
+- Being attractive
+
+### `Strategies`
+- Breaking  Monolith is a delicate process
+- Must be planned ahead
+- There are three main strategies for that
+
+`New modules as Services`
+- Pros
+    - Easy to implement
+    - Minimum code changes
+- Cons
+  - Takes time
+  - End result is not pure Microservice architecture
+  
+`Separate Existing Modules to Services`
+- Pros
+  - End result is pure Microservices architecture
+
+- Cons
+  - Take time
+  - A lot of changes
+  - Regression testing required
+
+`Complete rewite`
+- Pros
+  - Pure Microservices architecrture
+  - Opportunity for modernization
+- Cons
+  - Takes time
+  - Rigorous testing required
 
 
+# 15. `Case study`
 
+Mylib
+- Libraty management
+- Manages book inventory
+- Manages books' borrowing
+- Manages customers.
+- Display notifications (late return, ..)
+- Charges annual fee
+
+`Non function requirements`
+- What system should deal with such as load data volume. SLA and more
+  - How many expected concurrent users
+  - How many books will be managed
+  - How many borrowings in a day
+  - What's the desired SLA
+
+ `Data volume`
+- Refer to slides
 
 
 
