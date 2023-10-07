@@ -1,7 +1,7 @@
 # Microservices
-# 2. `History of Microservices`
+# 2. `History of Microservices and problem with monolith and SOA`
 This is result of problem with 2 architrcture paradiagms `Monolith` and `SOA`
-### 1.1 `Monolith`
+## 2.1 `Monolith`
  - original art where all sw component are exected in single process
  - No distribution of any kind
  - Strong coupling between all classes
@@ -21,7 +21,7 @@ This is result of problem with 2 architrcture paradiagms `Monolith` and `SOA`
  - Large and Complex code base - hard to maintain, a little change requires long process because impact to whole application so develop will try the best not to change anything and lead to system obsolete quite q2uickly
 
 
- ### 1.2 `Service Oriented Architecture (SOA)`
+ ## 2.2 `Service Oriented Architecture (SOA)`
 
  SOA is about sharing and giving, sharing capabilities using a well-defined API
  - Fist cointed in 1998
@@ -59,7 +59,7 @@ This is result of problem with 2 architrcture paradiagms `Monolith` and `SOA`
 - Design for Failure
 - Evolutionary Design
 
-### 2.1 `Componentization via Services`
+### 4.1 `Componentization via Services`
 - Modular is always a good idea
 - Components are the parts that together compose the software
 - Modularity can be achieved using:
@@ -73,7 +73,7 @@ Just use liberties in the case that is a part of service and that is service its
   - Independent deployment
   - Well defined interface
 
-### 2.2. `Organized Around Business Capabilities`
+### 4.2. `Organized Around Business Capabilities`
 - Every sevice is handled by a single team. responsible for all aspects -from UI -> DB so team have same goal, has holistic view of serices that is better in develop the app
 (monolith can share responsible by horizontal from UI is a team to DB is another team)
 
@@ -81,7 +81,7 @@ Motivation
  - Quick development
  - Well-defined boundaries
 
-### 2.3 `Products not Projects`
+### 4.3 `Products not Projects`
 
 - In traditional projects, the goal is deliver a working code
 - With microservices, the goal is deliver a working product
@@ -91,7 +91,7 @@ Motivation
 - Increase customer's satisfaction
 - Change developer's mindset
 
-### 2.4 `Smart Endpoints and Dump Pipes`
+### 4.4 `Smart Endpoints and Dump Pipes`
 - Microservice systems use "dumb pipes"- simple protocols
 - Strive to use what the web already offers
 
@@ -103,12 +103,12 @@ Motivation
 - Accelerate develop
 - Make app easiser to maintain
 
-### 2.5 `Decentralized Governance`
+### 4.5 `Decentralized Governance`
 - Each team is fully responsible for it's service
 - Enabled the loosely coupled nature of Microservices
 - polyot flatform
 
-### 2.6 `Decentralized Data Management`
+### 4.6 `Decentralized Data Management`
 - It service own database
 
 Important notes
@@ -119,12 +119,12 @@ Motivation
 - Right tool for right task - having the right database is important
 - Encourages isolation
 
-### 2.7 `Infrastructure Automation`
+### 4.7 `Infrastructure Automation`
 Tooling greatly helps in deployment using
  - Automated Testing
  - Automated Deployment
 
-### 2.8 `Infrastructure Automation`
+### 4.8 `Infrastructure Automation`
 - For Microservices automation is essential
 - Short deployment cycles are a must
 - Can't be done manually
@@ -133,7 +133,7 @@ Tooling greatly helps in deployment using
 Motivation
 - Short deployment cycles
 
-### 2.9 `Design for Failure`
+### 4.9 `Design for Failure`
 - Microservices have lot of processes and a lot of network traffic.
 - A lot can go wrong
 
@@ -171,7 +171,7 @@ The Architecture Process
 - Support the team
 
 
-### 4.1 `Mapping to Component - Mapping - most imprtant step in whole process`
+## 6.1 `Mapping to Component - Mapping - most imprtant step in whole process`
 - Determines how the system will look like in long run
 - Once set - not easy to change => taken very seriously
 
@@ -248,7 +248,7 @@ That provides system-wide utilities, meaning utilities are not tied to specific 
  - User management
   and this shoud be a part of Mapping
 
-### 4.2 `Mapping to component - Defining Communicaion Patterns`
+## 6.2 `Mapping to component - Defining Communicaion Patterns`
 - Effient communication between services is crucial
 - Alot interservice so important to choose the correct communication pattern
 
@@ -653,11 +653,10 @@ That case #1 in font of green service, it monitors the service and check how man
 - Being attractive
 
 ### `Strategies`
-- Breaking  Monolith is a delicate process
-- Must be planned ahead
-- There are three main strategies for that
 
-`New modules as Services`
+Breaking  Monolith is a delicate process, must be planned ahead. There are three main strategies for that
+
+`New modules as Services` - we have monolith and all new module which is added to monolith will make it as services
 - Pros
     - Easy to implement
     - Minimum code changes
@@ -665,7 +664,7 @@ That case #1 in font of green service, it monitors the service and check how man
   - Takes time
   - End result is not pure Microservice architecture
   
-`Separate Existing Modules to Services`
+`Separate Existing Modules to Services` - Current monolith modules will become the services
 - Pros
   - End result is pure Microservices architecture
 
