@@ -306,10 +306,6 @@ It depends - service discovery is easier in implementation but gateway provides 
 
 ![pub-sub](images/pub-sub.png)
 
----------------- Aready had in slide forder ------------
----------------- so I just write the importain things from now -----------------------------------------------
-
-
 # 7. `DEPLOYMENT`
  `CI/CD`
   - CI : Build -> Unitest -> Intergration Test -> Staging (dev deployment) -> Prod . 3 firsts is intergration. 2 last is delivery
